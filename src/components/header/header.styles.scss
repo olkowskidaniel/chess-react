@@ -1,0 +1,11 @@
+@import "../../variables.scss";
+
+.header-container {
+    width: 100%;
+
+    background-color: $background-light;
+
+    img {
+        width: 300px;
+    }
+}
