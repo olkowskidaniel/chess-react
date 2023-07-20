@@ -1,0 +1,42 @@
+@import "../../variables.scss";
+
+.player-card-container {
+    width: 30%;
+    height: 200px;
+    background-color: $background-light;
+    border-radius: 10px;
+    box-shadow: 0px 0px 12px 0px rgba(66, 68, 90, 1);
+    display: flex;
+
+    span {
+        align-self: center;
+    }
+
+    .no-avatar {
+        width: 190px;
+        height: 190px;
+        text-align: center;
+        line-height: 190px;
+    }
+    img {
+        margin-left: 5px;
+        width: 190px;
+        height: 190px;
+        border-radius: 10px;
+        align-self: center;
+    }
+
+    .player-info {
+        flex-grow: 1;
+        margin-left: 10px;
+        p:first-child {
+            text-align: center;
+            font-size: 20px;
+            margin: 10px 0 30px 0;
+        }
+        p {
+            margin: 5px 0;
+            font-size: 13px;
+        }
+    }
+}

@@ -2,8 +2,9 @@
 
 .header-container {
     width: 100%;
-
     background-color: $background-light;
+    display: flex;
+    justify-content: space-between;
 
     img {
         width: 300px;
