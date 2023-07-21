@@ -1,34 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
 import "./players.styles.scss";
 import PlayerCard from "../../components/player-card/player-card.component";
+import Pagination from "../../components/pagination/pagination.component";
+import { useQuery } from "@tanstack/react-query";
 
 const Players = () => {
-    const [gmPlayers, setGmPlayers] = useState([]);
+    const playersQuery = useQuery({
+        queryKey: ["players"],
+        queryFn: () => {
+            return axios.get("https://api.chess.com/pub/titled/GM");
+        },
+    });
 
-    useEffect(() => {
-        const dataFetch = async () => {
-            const data = await (
-                await fetch("https://api.chess.com/pub/titled/GM")
-            ).json();
-
-            setGmPlayers(data.players);
-        };
-
-        try {
-            dataFetch();
-        } catch (error) {
-            console.log(error);
-        }
-    }, []);
+    if (playersQuery.isLoading) return <h1>Loading...</h1>;
+    if (playersQuery.isError) {
+        return <pre>{JSON.stringify(playersQuery.error)}</pre>;
+    }
 
     return (
         <div className="players-container">
             <h1>List of players with GM title</h1>
-            <div className="cards-container">
-                {gmPlayers.slice(0, 15).map((player) => (
-                    <PlayerCard key={player} player={player} />
-                ))}
-            </div>
+            <h2>
+                There are currently {playersQuery.data.data.players.length}{" "}
+                players with GM title
+            </h2>
+            {playersQuery.data.data.players.map((player, index) => (
+                <p style={{ margin: "0px" }}>
+                    {index + 1}. {player}
+                </p>
+            ))}
         </div>
     );
 };

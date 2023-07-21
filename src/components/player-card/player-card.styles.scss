@@ -39,4 +39,10 @@
             font-size: 13px;
         }
     }
+
+    &:hover {
+        transform: scale(1.04);
+        transition: 0.3s ease-out;
+        cursor: pointer;
+    }
 }

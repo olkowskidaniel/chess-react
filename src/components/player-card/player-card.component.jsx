@@ -1,58 +1,31 @@
-import { useEffect, useState } from "react";
 import "./player-card.styles.scss";
 import GridLoader from "react-spinners/GridLoader";
 
-const PlayerCard = ({ player }) => {
-    const [playerData, setPlayerData] = useState(null);
-    const [country, setCountry] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        const dataFetch = async () => {
-            const data = await (
-                await fetch(`https://api.chess.com/pub/player/${player}`)
-            ).json();
-
-            const playerCountry = await (await fetch(data.country)).json();
-
-            setPlayerData(data);
-            setCountry(playerCountry.name);
-            setIsLoading(false);
-        };
-
-        try {
-            dataFetch();
-        } catch (error) {
-            console.log(error);
-        }
-    }, [player]);
-
+const PlayerCard = ({ player, isPlayerDataLoading }) => {
     return (
         <>
             <div
                 className="player-card-container"
                 style={
-                    isLoading
+                    isPlayerDataLoading
                         ? { justifyContent: "center" }
                         : { justifyContent: "space-between" }
                 }
             >
-                {isLoading ? (
+                {isPlayerDataLoading ? (
                     <GridLoader color="white" />
                 ) : (
                     <>
-                        {playerData.avatar ? (
-                            <img src={playerData.avatar} alt={player} />
+                        {player.avatar ? (
+                            <img src={player.avatar} alt={player} />
                         ) : (
                             <div className="no-avatar">NO AVATAR</div>
                         )}
                         <div className="player-info">
-                            <p>{playerData.username}</p>
-                            <p>Name: {playerData.name}</p>
-                            <p>Title: {playerData.title}</p>
-                            {playerData.fide && (
-                                <p>FIDE ranking: {playerData.fide}</p>
-                            )}
-                            <p>Country: {country}</p>
+                            <p>{player.username}</p>
+                            <p>Name: {player.name}</p>
+                            <p>Title: {player.title}</p>
+                            {player.fide && <p>FIDE ranking: {player.fide}</p>}
                         </div>
                     </>
                 )}
