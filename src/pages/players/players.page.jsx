@@ -6,6 +6,9 @@ import Pagination from "../../components/pagination/pagination.component";
 import { useQuery } from "@tanstack/react-query";
 
 const Players = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [playersPerPage, setPlayersPerPage] = useState(15);
+
     const playersQuery = useQuery({
         queryKey: ["players"],
         queryFn: () => {
@@ -17,19 +20,28 @@ const Players = () => {
     if (playersQuery.isError) {
         return <pre>{JSON.stringify(playersQuery.error)}</pre>;
     }
+    //calculating and slicing array for pagination
+    const lastPlayerIndex = currentPage * playersPerPage;
+    const firstPlayerIndex = lastPlayerIndex - playersPerPage;
+    const playersOnPage = playersQuery.data.data.players.slice(
+        firstPlayerIndex,
+        lastPlayerIndex
+    );
 
     return (
         <div className="players-container">
             <h1>List of players with GM title</h1>
-            <h2>
-                There are currently {playersQuery.data.data.players.length}{" "}
-                players with GM title
-            </h2>
-            {playersQuery.data.data.players.map((player, index) => (
-                <p style={{ margin: "0px" }}>
-                    {index + 1}. {player}
+            {playersOnPage.map((player, index) => (
+                <p key={index} style={{ margin: "0px" }}>
+                    {player}
                 </p>
             ))}
+            <Pagination
+                currentPage={currentPage}
+                total={playersQuery.data.data.players.length}
+                limit={playersPerPage}
+                onPageChange={(page) => setCurrentPage(page)}
+            />
         </div>
     );
 };
