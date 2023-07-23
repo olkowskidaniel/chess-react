@@ -1,7 +1,12 @@
 import "./pagination.styles.scss";
 
-const Pagination = ({ currentPage, total, limit, onPageChange }) => {
-    const pagesCount = Math.ceil(total / limit);
+const Pagination = ({
+    currentPage,
+    totalAmount,
+    amountPerPage,
+    onPageChange,
+}) => {
+    const pagesCount = Math.ceil(totalAmount / amountPerPage);
 
     const getButtonsCut = ({ pagesCount, cutButtonsAmount, currentPage }) => {
         const ceiling = Math.ceil(cutButtonsAmount / 2);
@@ -26,7 +31,7 @@ const Pagination = ({ currentPage, total, limit, onPageChange }) => {
 
     const buttonsCut = getButtonsCut({
         pagesCount,
-        cutButtonsAmount: 5,
+        cutButtonsAmount: 7,
         currentPage,
     });
     const buttons = () => {
@@ -37,8 +42,11 @@ const Pagination = ({ currentPage, total, limit, onPageChange }) => {
 
     return (
         <div className="pagination-container">
-            <button onClick={() => onPageChange(1)}>First</button>
+            <button className="text-button" onClick={() => onPageChange(1)}>
+                First
+            </button>
             <button
+                className="text-button"
                 disabled={currentPage === 1}
                 onClick={() => onPageChange(currentPage - 1)}
             >
@@ -46,24 +54,28 @@ const Pagination = ({ currentPage, total, limit, onPageChange }) => {
             </button>
             {buttons().map((page, index) => (
                 <button
+                    className={`num-button ${
+                        currentPage === page ? "active" : ""
+                    }`}
                     key={index}
-                    style={
-                        currentPage === page
-                            ? { backgroundColor: "yellow" }
-                            : {}
-                    }
                     onClick={() => onPageChange(page)}
                 >
                     {page}
                 </button>
             ))}
             <button
+                className="text-button"
                 disabled={currentPage === pagesCount}
                 onClick={() => onPageChange(currentPage + 1)}
             >
                 Next
             </button>
-            <button onClick={() => onPageChange(pagesCount)}>Last</button>
+            <button
+                className="text-button"
+                onClick={() => onPageChange(pagesCount)}
+            >
+                Last
+            </button>
         </div>
     );
 };

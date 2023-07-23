@@ -1,2 +1,26 @@
+@import "../../variables.scss";
+
 .pagination-container {
+    margin-top: 30px;
+    button.active {
+        background-color: $background-color;
+        color: white;
+    }
+
+    button {
+        margin: 0 3px;
+        height: 30px;
+        padding: 0;
+        border: 1px solid white;
+        border-radius: 5px;
+        background-color: white;
+    }
+
+    button.text-button {
+        width: 50px;
+    }
+
+    button.num-button {
+        width: 30px;
+    }
 }

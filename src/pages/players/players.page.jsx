@@ -4,6 +4,7 @@ import "./players.styles.scss";
 import PlayerCard from "../../components/player-card/player-card.component";
 import Pagination from "../../components/pagination/pagination.component";
 import { useQuery } from "@tanstack/react-query";
+import GridLoader from "react-spinners/GridLoader";
 
 const Players = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -11,15 +12,17 @@ const Players = () => {
 
     const playersQuery = useQuery({
         queryKey: ["players"],
+        refetchOnWindowFocus: false,
         queryFn: () => {
             return axios.get("https://api.chess.com/pub/titled/GM");
         },
     });
 
-    if (playersQuery.isLoading) return <h1>Loading...</h1>;
+    if (playersQuery.isLoading) return <GridLoader color="white" />;
     if (playersQuery.isError) {
         return <pre>{JSON.stringify(playersQuery.error)}</pre>;
     }
+
     //calculating and slicing array for pagination
     const lastPlayerIndex = currentPage * playersPerPage;
     const firstPlayerIndex = lastPlayerIndex - playersPerPage;
@@ -38,8 +41,8 @@ const Players = () => {
             ))}
             <Pagination
                 currentPage={currentPage}
-                total={playersQuery.data.data.players.length}
-                limit={playersPerPage}
+                totalAmount={playersQuery.data.data.players.length}
+                amountPerPage={playersPerPage}
                 onPageChange={(page) => setCurrentPage(page)}
             />
         </div>
