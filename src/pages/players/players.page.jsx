@@ -3,16 +3,16 @@ import axios from "axios";
 import "./players.styles.scss";
 import PlayerCard from "../../components/player-card/player-card.component";
 import Pagination from "../../components/pagination/pagination.component";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import GridLoader from "react-spinners/GridLoader";
 
 const Players = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [playersPerPage, setPlayersPerPage] = useState(15);
+    const [playersPerPage, setPlayersPerPage] = useState(9);
 
     const playersQuery = useQuery({
-        queryKey: ["players"],
         refetchOnWindowFocus: false,
+        queryKey: ["players"],
         queryFn: () => {
             return axios.get("https://api.chess.com/pub/titled/GM");
         },
@@ -34,11 +34,16 @@ const Players = () => {
     return (
         <div className="players-container">
             <h1>List of players with GM title</h1>
-            {playersOnPage.map((player, index) => (
-                <p key={index} style={{ margin: "0px" }}>
-                    {player}
-                </p>
-            ))}
+            <div className="cards-container">
+                {playersOnPage.map((player, index) => (
+                    <PlayerCard
+                        key={index}
+                        player={player}
+                        playerIndex={index}
+                    />
+                ))}
+            </div>
+
             <Pagination
                 currentPage={currentPage}
                 totalAmount={playersQuery.data.data.players.length}
